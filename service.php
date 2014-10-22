@@ -4,7 +4,7 @@ define('MEDIA_AUTH_KEY', '0123456789');
 
 // include composer autoload
 require 'vendor/autoload.php';
-use Intervention\Image\ImageManager;
+use Intervention\Image\ImageManagerStatic as Image;
 
 // create an image manager instance with favored driver
 $manager = new ImageManager(array('driver' => 'gd'));
