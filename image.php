@@ -44,7 +44,7 @@ try {
 
         unset($split_uri[6]);
 
-        $_file = BP . implode("\\", $split_uri) . DS . $sourceName .'.'. $ext;
+        $_file = BP . implode( DS , $split_uri) . DS . $sourceName .'.'. $ext;
         $img = Image::make($_file);
 
         if ($width) {
