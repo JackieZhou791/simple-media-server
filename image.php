@@ -1,7 +1,6 @@
 <?php
 define('DS', DIRECTORY_SEPARATOR);
 define('BP', dirname(__FILE__). DS);
-define('DEFAULT_PATH', BP . DS . 'public' . DS . 'attachment' . DS);
 
 // include composer autoload
 require 'vendor/autoload.php';
@@ -26,18 +25,27 @@ $split_uri = explode('/',$request_uri);
 
 try {
 
+    // Generate uri:http://DOMAINNAME/public/attachment/201410/13/16/200x200/543b916341d19.jpg
     $new_file = BP . $request_uri;
     
     if (file_exists($new_file)) {
         echo  Image::make($new_file)->response('jpg');
     } else {
-        $imageName = $split_uri[4];
+        //$split_uri[7] source image
+        if(!isset($split_uri[7])) {
+            throw new Exception('Access Denied!');
+        }
 
-        $_file = DEFAULT_PATH . $imageName;
+        //$split_uri[6] size part
+        list($width, $height) = explode('x', $split_uri[6]);
+        $imageName = $split_uri[7];
 
+        unset($split_uri[6]);
+        unset($split_uri[7]);
+
+        $_file = BP . implode("\\", $split_uri) . DS . $imageName;
         $img = Image::make($_file);
 
-        list($width, $height) = explode('x', $split_uri[3]);
         if ($width) {
             $img->resize($width,  $height);
         }
@@ -55,8 +63,8 @@ try {
     }
     exit();
 } catch (Exception $e) {
-    print_r($e->getMessage());die();
     $url = 'http://media.local.ve.cn/' . getPlaceholder('ve');
     header("Location: " . $url, TRUE, 302);
+    exit();
 }
 exit;
