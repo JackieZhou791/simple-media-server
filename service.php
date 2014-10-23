@@ -24,41 +24,32 @@ if($_FILES['images']['tmp_name'])
 {
 	$ext = pathinfo($origName, PATHINFO_EXTENSION);
 
-	$filename= date('Y').date('m').date('d').date('H').date('i').date('s').rand(100,999).'.'.$ext;
-	$uploadfile = $uploadPath . $filename;
+	$filename= date('Y').date('m').date('d').date('H').date('i').date('s').rand(100,999);
+	$uploadfile = $uploadPath . $filename .'.'.$ext;
 
-	if(!is_dir(dirname($uploadPath))) {
-		 @mkdir($uploadPath, 0777, true);
+	if(!is_dir($uploadPath)) {
+		if(!@mkdir($uploadPath, 0777, true)) {
+			echo '401';
+			exit();
+		}
 	}
 
-	if(move_uploaded_file($_FILES['images']['tmp_name'], $uploadfile))
+	if(@move_uploaded_file($_FILES['images']['tmp_name'], $uploadfile))
 	{
-		if(!is_dir($thumbPath)) {
-			@mkdir($thumbPath, 0777, true);
-		}
-
-		$thumbfile = $thumbPath . $filename;
-		$img = Image::make($uploadfile);
-
-		$img->fit(200,200, function ($constraint) {
-                $constraint->upsize();
-            });
-		$img->save($thumbfile);
-		//Logic to do the image resize/path/etc.
 
 		$arr['status'] = '1';
-		$arr['url'] = $baseMedialUrl . $baseMedialPath . $filename;
-		$arr['thumb'] = $baseMedialUrl . $baseMedialPath . 'thumbnails/'. $filename;
+		$arr['url'] = $baseMedialUrl . $baseMedialPath . $filename . '.' . $ext;
+		$arr['thumb'] = $baseMedialUrl . $baseMedialPath . $filename . '_200_200.' . $ext;
 		echo json_encode($arr);
 		exit();
 	}
 
-	echo '401';
+	echo '402';
 	exit();
 }
 else
 {
-	echo '402';
+	echo '403';
 	exit(); 
 }
 
