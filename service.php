@@ -40,7 +40,9 @@ if($_FILES['images']['tmp_name'])
 		$thumbfile = $thumbPath . $filename;
 		$img = Image::make($uploadfile);
 
-		$img->resize(200,200);
+		$img->fit(200,200, function ($constraint) {
+                $constraint->upsize();
+            });
 		$img->save($thumbfile);
 		//Logic to do the image resize/path/etc.
 

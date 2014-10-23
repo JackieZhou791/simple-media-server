@@ -25,29 +25,32 @@ $split_uri = explode('/',$request_uri);
 
 try {
 
-    // Generate uri:http://DOMAINNAME/public/attachment/201410/13/16/200x200/543b916341d19.jpg
+    // Generate uri:http://DOMAINNAME/public/attachment/201410/13/16/543b916341d19_200_200.jpg
     $new_file = BP . $request_uri;
+    $origName = pathinfo($new_file, PATHINFO_FILENAME);
+    $ext = pathinfo($new_file, PATHINFO_EXTENSION);
     
     if (file_exists($new_file)) {
-        echo  Image::make($new_file)->response('jpg');
+        echo  Image::make($new_file)->response($ext);
     } else {
-        //$split_uri[7] source image
-        if(!isset($split_uri[7])) {
+        //$split_uri[6] source image
+        if(!isset($split_uri[6])) {
             throw new Exception('Access Denied!');
         }
 
-        //$split_uri[6] size part
-        list($width, $height) = explode('x', $split_uri[6]);
-        $imageName = $split_uri[7];
+
+        //Fetch source image name and size
+        list($sourceName, $width, $height) = explode('_', $origName);
 
         unset($split_uri[6]);
-        unset($split_uri[7]);
 
-        $_file = BP . implode("\\", $split_uri) . DS . $imageName;
+        $_file = BP . implode("\\", $split_uri) . DS . $sourceName .'.'. $ext;
         $img = Image::make($_file);
 
         if ($width) {
-            $img->resize($width,  $height);
+            $img->fit($width,  $height, function ($constraint) {
+                $constraint->upsize();
+            });
         }
 
         $new_file =  BP . $request_uri;
@@ -59,10 +62,11 @@ try {
         if (!file_exists($new_file) || !@imagecreatefromjpeg($new_file)) {
             $img->save($new_file);
         }
-        echo Image::make($new_file)->response('jpg');
+        echo Image::make($new_file)->response($ext);
     }
     exit();
 } catch (Exception $e) {
+    // echo $e->getMessage();die();
     $url = 'http://media.local.ve.cn/' . getPlaceholder('ve');
     header("Location: " . $url, TRUE, 302);
     exit();
