@@ -3,6 +3,8 @@
 define('DS', DIRECTORY_SEPARATOR);
 define('MEDIA_AUTH_KEY', '0123456789');
 
+require 'encrypt.php';
+
 // include composer autoload
 require 'vendor/autoload.php';
 use Intervention\Image\ImageManagerStatic as Image;
@@ -39,7 +41,7 @@ if($_FILES['images']['tmp_name'])
 
 		$arr['status'] = '1';
 		$arr['url'] = $baseMedialUrl . $baseMedialPath . $filename . '.' . $ext;
-		$arr['thumb'] = $baseMedialUrl . $baseMedialPath . $filename . '_200_200.' . $ext;
+		$arr['thumb'] = $baseMedialUrl . $baseMedialPath . ve_encrypt($filename . '_200_200.') . '.' . $ext;
 		echo json_encode($arr);
 		exit();
 	}

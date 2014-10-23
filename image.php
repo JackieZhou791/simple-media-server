@@ -2,17 +2,13 @@
 define('DS', DIRECTORY_SEPARATOR);
 define('BP', dirname(__FILE__). DS);
 
+require 'encrypt.php';
+
 // include composer autoload
 require 'vendor/autoload.php';
 use Intervention\Image\ImageManagerStatic as Image;
 
-function getParam($param, $split_uri = array()) {
-    $pos = array_search($param, $split_uri);
-    if ($pos && isset($split_uri[$pos + 1])) {
-        return $split_uri[$pos + 1];
-    }
-    return null;
-}
+
 
 function getPlaceholder($attr)
 {
@@ -27,9 +23,8 @@ try {
 
     // Generate uri:http://DOMAINNAME/public/attachment/201410/13/16/543b916341d19_200_200.jpg
     $new_file = BP . $request_uri;
-    $origName = pathinfo($new_file, PATHINFO_FILENAME);
     $ext = pathinfo($new_file, PATHINFO_EXTENSION);
-    
+
     if (file_exists($new_file)) {
         echo  Image::make($new_file)->response($ext);
     } else {
@@ -38,6 +33,8 @@ try {
             throw new Exception('Access Denied!');
         }
 
+        $encryptFilename = pathinfo($new_file, PATHINFO_FILENAME);
+        $origName = pathinfo(ve_decrypt($encryptFilename), PATHINFO_FILENAME);
 
         //Fetch source image name and size
         list($sourceName, $width, $height) = explode('_', $origName);
