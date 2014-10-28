@@ -18,7 +18,7 @@ if($mediaAuthKey != MEDIA_AUTH_KEY ) {
 
 $uploadPath = dirname(__FILE__) . DS . 'public' . DS . 'attachment' . DS . date('Y',time()) . date('m',time()) . DS.date('d',time()) . DS. date('H',time()) . DS;
 $thumbPath = $uploadPath . 'thumbnails' . DS;
-$baseMedialUrl = 'http://media.local.ve.cn';
+$baseMedialUrl = 'http://upload.ve.cn';
 $baseMedialPath = '/public/attachment/' . date('Y',time()) . date('m',time()) . '/'.date('d',time()) . '/'. date('H',time()) . '/';
 
 //Save image from post data

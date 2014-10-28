@@ -26,6 +26,9 @@ try {
     $ext = pathinfo($new_file, PATHINFO_EXTENSION);
 
     if (file_exists($new_file)) {
+        header('Content-type: image/jpeg');
+        header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 2592000) . ' GMT');
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s \G\M\T', time()));
         echo  Image::make($new_file)->response($ext);
     } else {
         //$split_uri[6] source image
@@ -59,12 +62,16 @@ try {
         if (!file_exists($new_file) || !@imagecreatefromjpeg($new_file)) {
             $img->save($new_file);
         }
+
+        header('Content-type: image/jpeg');
+        header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 2592000) . ' GMT');
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s \G\M\T', time()));
         echo Image::make($new_file)->response($ext);
     }
     exit();
 } catch (Exception $e) {
     // echo $e->getMessage();die();
-    $url = 'http://media.local.ve.cn/' . getPlaceholder('ve');
+    $url = 'http://upload.ve.cn/' . getPlaceholder('ve');
     header("Location: " . $url, TRUE, 302);
     exit();
 }
