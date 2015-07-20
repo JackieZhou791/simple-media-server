@@ -37,7 +37,7 @@ try {
         }
 
         $encryptFilename = pathinfo($new_file, PATHINFO_FILENAME);
-        $origName = pathinfo(ve_decrypt($encryptFilename), PATHINFO_FILENAME);
+        $origName = pathinfo(urlsafe_b64decode($encryptFilename), PATHINFO_FILENAME);
 
         //Fetch source image name and size
         list($sourceName, $width, $height) = explode('_', $origName);
@@ -71,7 +71,7 @@ try {
     exit();
 } catch (Exception $e) {
     // echo $e->getMessage();die();
-    $url = 'http://upload.ve.cn/' . getPlaceholder('ve');
+    $url = 'http://upload.local/' . getPlaceholder('default');
     header("Location: " . $url, TRUE, 302);
     exit();
 }

@@ -18,7 +18,7 @@ if($mediaAuthKey != MEDIA_AUTH_KEY ) {
 
 $uploadPath = dirname(__FILE__) . DS . 'public' . DS . 'attachment' . DS . date('Y',time()) . date('m',time()) . DS.date('d',time()) . DS. date('H',time()) . DS;
 $thumbPath = $uploadPath . 'thumbnails' . DS;
-$baseMedialUrl = 'http://upload.ve.cn';
+$baseMedialUrl = 'http://upload.local';
 $baseMedialPath = '/public/attachment/' . date('Y',time()) . date('m',time()) . '/'.date('d',time()) . '/'. date('H',time()) . '/';
 
 //Save image from post data
@@ -41,7 +41,7 @@ if($_FILES['images']['tmp_name'])
 
 		$arr['status'] = '1';
 		$arr['url'] = $baseMedialUrl . $baseMedialPath . $filename . '.' . $ext;
-		$arr['thumb'] = $baseMedialUrl . $baseMedialPath . ve_encrypt($filename . '_200_200.') . '.' . $ext;
+		$arr['thumb'] = $baseMedialUrl . $baseMedialPath . urlsafe_b64encode($filename . '_200_200.') . '.' . $ext;
 		echo json_encode($arr);
 		exit();
 	}

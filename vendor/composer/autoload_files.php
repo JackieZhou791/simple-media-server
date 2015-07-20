@@ -6,5 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    $vendorDir . '/bullet-proof/image-uploader/src/bulletproof.php',
+    $vendorDir . '/defuse/php-encryption/autoload.php',
 );

@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	//upload photo
 	$curl = new Curl();
 
-	$upload_url = 'http://media.local.ve.cn/service.php';
+	$upload_url = 'http://media.local/service.php';
 	$photo_data['media_auth_key'] = MEDIA_AUTH_KEY;
 
 	$photo_data['images'] = '@' . $_FILES['images']['tmp_name'];
